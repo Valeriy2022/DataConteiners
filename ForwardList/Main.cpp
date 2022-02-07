@@ -21,7 +21,6 @@ public:
 #ifdef DEBUG
 		cout << "EConstrcutor:\t" << this << endl;
 #endif // DEBUG
-
 	}
 	~Element()
 	{
@@ -29,7 +28,6 @@ public:
 #ifdef DEBUG
 		cout << "EDestrcutor:\t" << this << endl;
 #endif // DEBUG
-
 	}
 	friend class ForwardList;
 };
@@ -41,11 +39,41 @@ class ForwardList//Односвязный (однонаправленный) с�
 	Element* Head;	//Голова списка - указывает на начальный элемент списка.
 	unsigned int size;//Размер списка
 public:
+	unsigned int get_size()const
+	{
+		return this->size;
+	}
 	ForwardList()
 	{
 		Head = nullptr;//Если голова указывает на 0, то список пуст.
 		size = 0;
 		cout << "LConstructor:\t" << this << endl;
+	}
+	ForwardList(unsigned int size) :ForwardList()
+	{
+		//this->Head = nullptr;
+		//this->size = 0;
+		for (int i = 0; i < size; i++)
+		{
+			push_front(0);
+		}
+	}
+	ForwardList(const initializer_list<int>& il) :ForwardList()
+	{
+		//il.begin() - возвращает итератор на начало контейнера
+		//il.end()  - возвращает итератор на конец контейнера
+		cout << typeid(il.begin()).name() << endl;
+		//const int* - константный указатель (НЕ изменяется адрес)
+		//int const* - указатель на константу (НЕ изменяется значение по адресу)
+		/*for (int const* it = il.begin(); it != il.end(); it++)
+		{
+			//it - iterator
+			push_back(*it);
+		}*/
+		for (int const* it = il.end() - 1; it != il.begin() - 1; it--)
+		{
+			push_front(*it);
+		}
 	}
 	~ForwardList()
 	{
@@ -53,12 +81,29 @@ public:
 		cout << "LDestructor:\t" << this << endl;
 	}
 
+	//					Operators:
+	const int& operator[](int index)const
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++)Temp = Temp->pNext;
+		return Temp->Data;
+	}
+	int& operator[](int index)
+	{
+		Element* Temp = Head;
+		for (int i = 0; i < index; i++)Temp = Temp->pNext;
+		return Temp->Data;
+	}
+
+
 	//					Addigng elements:
 	void push_front(int Data)
 	{
-		Element* New = new Element(Data);//Создаем новый элемент и помещаем в него значение Data
-		New->pNext = Head;	//Привязывем новый элемент к началу списка
-		Head = New;	//Переводим Голову на новый элемент
+		//Element* New = new Element(Data);//Создаем новый элемент и помещаем в него значение Data
+		//New->pNext = Head;	//Привязывем новый элемент к началу списка
+		//Head = New;	//Переводим Голову на новый элемент
+
+		Head = new Element(Data, Head);
 		size++;
 	}
 	void push_back(int Data)
@@ -66,27 +111,31 @@ public:
 		//0) Проверяем, является ли список пустым:
 		if (Head == nullptr)return push_front(Data);
 		//1) Создаем новый элемент:
-		Element* New = new Element(Data);
+		/*Element* New = new Element(Data);*/
 		//2) Доходим до конца списка:
 		Element* Temp = Head;
 		while (Temp->pNext)//Пока, pNext текущего элемента НЕ ноль
 			Temp = Temp->pNext;//переходим на следующий элемент
 		//Теперь мы находимся в последнем элементе, т.е. Temp->pNext == nullptr
 		//3) Присоединяем новый элемент к последнему:
-		Temp->pNext = New;
+		/*Temp->pNext = New;*/
+		Temp->pNext = new Element(Data);
+
+
 		size++;
 	}
 	void insert(int index, int Data)
 	{
 		if (index == 0 || Head == nullptr)return push_front(Data);
 		if (index > size)return;
-		Element* New = new Element(Data);
+		/*Element* New = new Element(Data);*/
 		//1) Доходим до нужного элемента:
 		Element* Temp = Head;
 		for (int i = 0; i < index - 1; i++)Temp = Temp->pNext;
 		//3) Включаем новый элемент в список:
-		New->pNext = Temp->pNext;
-		Temp->pNext = New;
+		/*New->pNext = Temp->pNext;
+		Temp->pNext = New;*/
+		Temp->pNext = new Element(Data, Temp->pNext);
 		size++;
 	}
 
@@ -134,53 +183,11 @@ public:
 		size--;
 	}
 
-	
-	void unique()
-	{				
-		Element* Temp = Head;
-
-		for (int i = 0; Temp; ++i)
-		{
-			Element* NextElement = Temp->pNext;
-			while (NextElement)
-			{
-				if (Temp->Data == NextElement->Data)
-				{					
-					Element* Erased = Temp->pNext;
-					Temp = Erased->pNext;
-					delete Erased;
-				}
-				NextElement = NextElement->pNext;
-			}
-
-			Temp = Temp->pNext;
-		}
-	}
-
-	void unique(ForwardList& other)
-	{
-		bool flag;
-		for (size_t i = 0; i < other.get_size(); i++)
-		{
-			flag = 0;
-			for (size_t j = 0; j < other.get_size(); j++)
-			{
-				if (other[i] == other[j] && i != j)
-				{
-					flag = 1;
-				}
-
-			}
-			if (flag == 0)push_front(other[i]);
-		}
-	}
-
 	//					Methods:
 	void print()const
 	{		
 		Element* Temp = Head;	//Temp - это итератор.
-		//Итератор - это указатель, при помощи которого можно получить доступ 
-		//к элементам структуры данных.
+		//Итератор - это указатель, при помощи которого можно получить доступ к элементам структуры данных.
 		while (Temp)//Пока Итератор содержит ненулевой адрес.
 		{
 			cout << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
@@ -191,11 +198,20 @@ public:
 	}
 };
 
-//#define BASE_CHECK
+#define BASE_CHECK
 //#define DESTRUCTOR_CHECK
 //#define HOME_WORK_1
 //#define HOME_WORK_2
-#define HOME_WORK_3
+
+void print_list(const ForwardList& list)
+{
+	for (int i = 0; i < list.get_size(); i++)
+	{
+		cout << list[i] << tab;
+	}
+	cout << endl;
+}
+
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -203,14 +219,17 @@ void main()
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
 	ForwardList list;
-	list.pop_front();
+	/*list.pop_front();*/
 	for (int i = 0; i < n; i++)
 	{
-		//list.push_front(rand() % 100);
-		list.push_back(rand() % 100);
+		list.push_front(rand() % 100);
+		/*list.push_back(rand() % 100);*/
 	}
 	list.print();
-	//list.push_back(123);
+	/*list.push_front(555);
+	list.print();
+	list.push_back(555);
+	list.print();*/
 	//list.pop_front();
 	//list.pop_back();
 
@@ -222,9 +241,9 @@ void main()
 	list.insert(index, value);
 	list.print();
 
-	cout << "Введите индекс удаляемого элемента: "; cin >> index;
+	/*cout << "Введите индекс удаляемого элемента: "; cin >> index;
 	list.erase(index);
-	list.print();
+	list.print();*/
 
 #endif // BASE_CHECK
 
@@ -254,39 +273,90 @@ void main()
 	list.print();
 #endif // DESTRUCTOR_CHECK
 
+	/*const int a = 250;
+	a = 270;*/
 #ifdef HOME_WORK_1
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
 	ForwardList list(n);
 	for (int i = 0; i < n; i++)
 	{
+		//l-value = r-value;
 		list[i] = rand() % 100;
+		//			(int)
 	}
-	for (int i = 0; i < n; i++)
-	{
-		cout << list[i] << tab;
-	}
-	cout << endl;
+	print_list(list);
 #endif // HOME_WORK_1
 
 #ifdef HOME_WORK_2
+	//		 l-value = r-value
 	ForwardList list = { 3,5,8,13,21 };
+	//(ForwardList)  = (initializer_list)
 	list.print();
 #endif // HOME_WORK_2
 
-#ifdef HOME_WORK_3
-	ForwardList list1;
-	list1.push_front(1);
-	list1.push_back(3);
-	list1.push_back(5);
-	list1.push_back(3);
-	list1.push_back(13);
-	list1.push_back(5);
-	list1.print();
-	list1.unique();
-	list1.print();
-#endif // HOME_WORK_3
 }
+
+	
+//	void unique()
+//	{				
+//		Element* Temp = Head;
+//
+//		for (int i = 0; Temp; ++i)
+//		{
+//			Element* NextElement = Temp->pNext;
+//			while (NextElement)
+//			{
+//				if (Temp->Data == NextElement->Data)
+//				{					
+//					Element* Erased = Temp->pNext;
+//					Temp = Erased->pNext;
+//					delete Erased;
+//				}
+//				NextElement = NextElement->pNext;
+//			}
+//
+//			Temp = Temp->pNext;
+//		}
+//	}
+//
+//	void unique(ForwardList& other)
+//	{
+//		bool flag;
+//		for (size_t i = 0; i < other.get_size(); i++)
+//		{
+//			flag = 0;
+//			for (size_t j = 0; j < other.get_size(); j++)
+//			{
+//				if (other[i] == other[j] && i != j)
+//				{
+//					flag = 1;
+//				}
+//
+//			}
+//			if (flag == 0)push_front(other[i]);
+//		}
+//	}
+//
+//
+//#define HOME_WORK_3
+//void main()
+//{
+//	setlocale(LC_ALL, "");
+//
+//#ifdef HOME_WORK_3
+//	ForwardList list1;
+//	list1.push_front(1);
+//	list1.push_back(3);
+//	list1.push_back(5);
+//	list1.push_back(3);
+//	list1.push_back(13);
+//	list1.push_back(5);
+//	list1.print();
+//	list1.unique();
+//	list1.print();
+//#endif // HOME_WORK_3
+//}
 
 //TODO:
 //0. Написать метод unique(), который находит и удаляет повторяющиеся значения в списке, и таким образом, делает список уникальным;
