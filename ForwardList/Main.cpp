@@ -246,6 +246,19 @@ public:
 		size--;
 	}
 
+	void unique()
+	{	
+		for (size_t i = 0; i < size; i++)
+			{
+			  for (size_t j = i+1; j < size; j++)
+				{
+					if ((*this)[i] == (*this)[j])
+						erase(j);
+				}
+			}
+	}
+
+
 	//					Methods:
 	void print()const
 	{
@@ -285,8 +298,8 @@ void print_list(const ForwardList& list)
 //#define HOME_WORK_1
 //#define HOME_WORK_2
 //#define RANGE_BASE_FOR_ARRAY
-#define RANGE_BASE_FOR_LIST
-
+//#define RANGE_BASE_FOR_LIST
+#define HOME_WORK_3
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -402,5 +415,16 @@ void main()
 	}
 	cout << endl;
 #endif // RANGE_BASE_FOR_LIST
-
+#ifdef HOME_WORK_3
+		ForwardList list1;
+		list1.push_front(1);
+		list1.push_back(3);
+		list1.push_back(5);
+		list1.push_back(3);
+		list1.push_back(13);
+		list1.push_back(5);
+		list1.print();
+		list1.unique();
+		list1.print();
+	#endif // HOME_WORK_3
 }
