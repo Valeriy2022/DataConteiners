@@ -258,6 +258,16 @@ public:
 			}
 	}
 
+	void reverse()
+	{
+		int value;
+		for (size_t i = 0; i < size / 2; i++)
+		{
+			value = (*this)[i];
+			(*this)[i] = (*this)[size - 1 - i];
+			(*this)[size - 1 - i] = value;
+		}
+	}
 
 	//					Methods:
 	void print()const
@@ -425,6 +435,8 @@ void main()
 		list1.push_back(5);
 		list1.print();
 		list1.unique();
+		list1.print();
+		list1.reverse();
 		list1.print();
 	#endif // HOME_WORK_3
 }
