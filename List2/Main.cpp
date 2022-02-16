@@ -1,4 +1,4 @@
-//List2
+п»ї//List2
 #include<iostream>
 using namespace std;
 using std::cin;
@@ -11,9 +11,9 @@ class List
 {
 	class Element
 	{
-		int Data;		//Значение элемента
-		Element* pNext;	//Адрес следующего элемента
-		Element* pPrev;	//Адрес предыдущего элемента
+		int Data;		//Р—РЅР°С‡РµРЅРёРµ СЌР»РµРјРµРЅС‚Р°
+		Element* pNext;	//РђРґСЂРµСЃ СЃР»РµРґСѓСЋС‰РµРіРѕ СЌР»РµРјРµРЅС‚Р°
+		Element* pPrev;	//РђРґСЂРµСЃ РїСЂРµРґС‹РґСѓС‰РµРіРѕ СЌР»РµРјРµРЅС‚Р°
 	public:
 		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr) :
 			Data(Data), pNext(pNext), pPrev(pPrev)
@@ -152,8 +152,8 @@ public:
 			Temp = Tail;
 			for (int i = 0; i < size - 1 - index; i++)Temp = Temp->pPrev;
 		}
-		//Неважно, с какой стороны мы добрались до нужного элемента, 
-		//процедура добавления нового элемента быдет идентичной:
+		//РќРµРІР°Р¶РЅРѕ, СЃ РєР°РєРѕР№ СЃС‚РѕСЂРѕРЅС‹ РјС‹ РґРѕР±СЂР°Р»РёСЃСЊ РґРѕ РЅСѓР¶РЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°, 
+		//РїСЂРѕС†РµРґСѓСЂР° РґРѕР±Р°РІР»РµРЅРёСЏ РЅРѕРІРѕРіРѕ СЌР»РµРјРµРЅС‚Р° Р±С‹РґРµС‚ РёРґРµРЅС‚РёС‡РЅРѕР№:
 		//Element* New = new Element(Data);
 		//New->pNext = Temp;//1)
 		//New->pPrev = Temp->pPrev;//2)
@@ -234,13 +234,13 @@ public:
 	{
 		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << "Количество элементов списка: " << size << endl;
+		cout << "РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ СЃРїРёСЃРєР°: " << size << endl;
 	}
 	void reverse_print()const
 	{
 		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << "Количество элементов списка: " << size << endl;
+		cout << "РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ СЃРїРёСЃРєР°: " << size << endl;
 	}
 };
 
@@ -252,7 +252,7 @@ void main()
 	setlocale(LC_ALL, "");
 #ifdef BASE_CHECK
 	int n;
-	cout << "Введите размер списка: "; cin >> n;
+	cout << "Р’РІРµРґРёС‚Рµ СЂР°Р·РјРµСЂ СЃРїРёСЃРєР°: "; cin >> n;
 	List list;
 	for (int i = 0; i < n; i++)
 	{
@@ -269,15 +269,15 @@ void main()
 
 	int index;
 	int value;
-	cout << "Введите индекс добавляемого элемента: "; cin >> index;
-	cout << "Введите значение добавляемого элемента: "; cin >> value;
+	cout << "Р’РІРµРґРёС‚Рµ РёРЅРґРµРєСЃ РґРѕР±Р°РІР»СЏРµРјРѕРіРѕ СЌР»РµРјРµРЅС‚Р°: "; cin >> index;
+	cout << "Р’РІРµРґРёС‚Рµ Р·РЅР°С‡РµРЅРёРµ РґРѕР±Р°РІР»СЏРµРјРѕРіРѕ СЌР»РµРјРµРЅС‚Р°: "; cin >> value;
 	list.insert(index-1, value);
 	list.print();
 	
 	list.reverse_print();
 
 	int index;
-	cout << "Введите индекс удаляемого элемента: "; cin >> index;
+	cout << "Р’РІРµРґРёС‚Рµ РёРЅРґРµРєСЃ СѓРґР°Р»СЏРµРјРѕРіРѕ СЌР»РµРјРµРЅС‚Р°: "; cin >> index;
 	list.erase(index-1);
 	list.print();
 	list.reverse_print();
@@ -298,7 +298,7 @@ void main()
 //{
 //	setlocale(LC_ALL, "");
 //	int n;
-//	cout << "Введите размер списка: "; cin >> n;
+//	cout << "Р’РІРµРґРёС‚Рµ СЂР°Р·РјРµСЂ СЃРїРёСЃРєР°: "; cin >> n;
 //	List list;
 //	for (int i = 0; i < n; i++)
 //	{
@@ -314,14 +314,8 @@ void main()
 
 //TODO:
 
-//Проверочный код должен заработать:
-//List list = { 3, 5, 8, 13, 21 };
-//for (int i : list)cout << i << tab; cout << endl;
-
 //
 //Destructor;
 //CopyMethods;
 //MoveMethods;
 //ILconstructor;
-//List list = { 3,5,8,13,21 };
-//for (int i : list) cout << i << tab; cout << endl;
