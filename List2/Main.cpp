@@ -31,11 +31,116 @@ class List
 	Element* Tail;
 	unsigned int size;*/
 
-	class Iterator
+	class BaseIterator
 	{
+	protected:	//Открываем прямой доступ к переменной Temp из дочерних классов
 		Element* Temp;
 	public:
-		Iterator(Element* Temp = nullptr) :Temp(Temp)
+		BaseIterator(Element* Temp = nullptr) :Temp(Temp)
+		{
+			cout << "BitConstructor:\t" << this << endl;
+		}
+		~BaseIterator()
+		{
+			cout << "BitDestructor:\t" << this << endl;
+		}
+		virtual BaseIterator& operator++() = 0;
+		//virtual BaseIterator operator++(int) = 0;
+		virtual BaseIterator& operator--() = 0;
+		//virtual BaseIterator operator--(int) = 0;
+
+		bool operator==(const BaseIterator& other)const
+		{
+			return this->Temp == other.Temp;
+		}
+		bool operator!=(const BaseIterator& other)const
+		{
+			return this->Temp != other.Temp;
+		}
+		const int& operator*()const
+		{
+			return Temp->Data;
+		}
+		operator bool()const
+		{
+			return Temp;
+		}
+	};
+public:
+	class ConstIterator :public BaseIterator
+	{
+	public:
+		ConstIterator(Element* Temp = nullptr) :BaseIterator(Temp)
+		{
+			cout << "CItConstructor:\t" << this << endl;
+		}
+		~ConstIterator()
+		{
+			cout << "CItDestructor:\t" << this << endl;
+		}
+
+		ConstIterator& operator++()
+		{
+			Temp = Temp->pNext;
+			return *this;
+		}
+		ConstIterator operator++(int)
+		{
+			ConstIterator old = *this;
+			Temp = Temp->pNext;
+			return old;
+		}
+		ConstIterator& operator--()
+		{
+			Temp = Temp->pPrev;
+			return *this;
+		}
+		ConstIterator operator--(int)
+		{
+			ConstIterator old = *this;
+			Temp = Temp->pPrev;
+			return old;
+		}
+	};
+	class ConstReverseIterator :public BaseIterator
+	{
+	public:
+		ConstReverseIterator(Element* Temp = nullptr) :BaseIterator(Temp)
+		{
+			cout << "CRItConstructor:\t" << this << endl;
+		}
+		~ConstReverseIterator()
+		{
+			cout << "CRItDestructor:\t" << this << endl;
+		}
+
+		ConstReverseIterator& operator++()
+		{
+			Temp = Temp->pPrev;
+			return *this;
+		}
+		ConstReverseIterator operator++(int)
+		{
+			ConstReverseIterator old = *this;
+			Temp = Temp->pPrev;
+			return old;
+		}
+		ConstReverseIterator& operator--()
+		{
+			Temp = Temp->pNext;
+			return *this;
+		}
+		ConstReverseIterator operator--(int)
+		{
+			ConstReverseIterator old = *this;
+			Temp = Temp->pNext;
+			return old;
+		}
+	};
+	class Iterator :public ConstIterator
+	{
+	public:
+		Iterator(Element* Temp = nullptr) :ConstIterator(Temp)
 		{
 			cout << "ItConstructor:\t" << this << endl;
 		}
@@ -43,66 +148,83 @@ class List
 		{
 			cout << "ItDestructor:\t" << this << endl;
 		}
-
-		bool operator==(const Iterator& other)const
-		{
-			return this->Temp == other.Temp;
-		}
-		bool operator!=(const Iterator& other)const
-		{
-			return this->Temp != other.Temp;
-		}
-		Iterator& operator++()	//Prefix increment
-		{
-			Temp = Temp->pNext;
-			return *this;
-		}
-		Iterator operator++(int)//Postfix increment
-		{
-			Iterator old = *this;	
-			Temp = Temp->pNext;		
-			return old;	
-		}
-		const int& operator*()const
+		int& operator*()
 		{
 			return Temp->Data;
+		}
+	};
+	class ReverseIterator :public ConstReverseIterator
+	{
+	public:
+		ReverseIterator(Element* Temp = nullptr) :ConstReverseIterator(Temp)
+		{
+			cout << "RItConstructor:\t" << this << endl;
+		}
+		~ReverseIterator()
+		{
+			cout << "RItDestructor:\t" << this << endl;
 		}
 		int& operator*()
 		{
 			return Temp->Data;
 		}
-
 	};
-public:
+	ConstIterator cbegin()const//const begin
+	{
+		return Head;
+	}
+	ConstIterator cend()const //const end
+	{
+		return nullptr;
+	}
+	ConstReverseIterator crbegin()const//const reverse begin
+	{
+		return Tail;
+	}
+	ConstReverseIterator crend()const//const reverse end
+	{
+		return nullptr;
+	}
+	Iterator begin()//const begin
+	{
+		return Head;
+	}
+	Iterator end() //const end
+	{
+		return nullptr;
+	}
+	ReverseIterator rbegin()//const reverse begin
+	{
+		return Tail;
+	}
+	ReverseIterator rend()//const reverse end
+	{
+		return nullptr;
+	}
+
 	List()
 	{
 		Head = Tail = nullptr;
 		size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
-
 	List(const initializer_list<int>& il) :List()
-	{		
-		cout << typeid(il.begin()).name() << endl;		
-		for (int const* it = il.end() - 1; it != il.begin() - 1; it--)
+	{
+		cout << typeid(il.begin()).name() << endl;
+		//const int* p;//константный указатель
+		//int const* p;//указатель на константу
+		//const int const* p;//константный указатель на константу.
+		for (int const* it = il.begin(); it != il.end(); ++it)
 		{
-			push_front(*it);
+			//it - iterator
+			push_back(*it);
 		}
 	}
-
 	~List()
 	{
 		//while (Head)pop_front();
 		while (Tail)pop_back();
 		cout << "LDestructor:\t" << this << endl;
-	}
-	Iterator begin()
-	{
-		return Head;
-	}
-	Iterator end()
-	{
-		return nullptr;
 	}
 
 	//			Adding elements:
@@ -129,11 +251,12 @@ public:
 			size++;
 			return;
 		}
-		//Element* New = new Element(Data);//1)
-		//New->pPrev = Tail;//2)
-		//Tail->pNext = New;//3)
-		//Tail = New;//4)
-		Tail = Tail->pNext = new Element(Data,0,Tail);
+		/*Element* New = new Element(Data);//1)
+		New->pPrev = Tail;//2)
+		Tail->pNext = New;//3)
+		Tail = New;//4)*/
+
+		Tail = Tail->pNext = new Element(Data, nullptr, Tail);
 		size++;
 	}
 	void insert(int index, int Data)
@@ -154,12 +277,11 @@ public:
 		}
 		//Неважно, с какой стороны мы добрались до нужного элемента, 
 		//процедура добавления нового элемента быдет идентичной:
-		//Element* New = new Element(Data);
-		//New->pNext = Temp;//1)
-		//New->pPrev = Temp->pPrev;//2)
-		//Temp->pPrev->pNext = New;//3)
-		//Temp->pPrev = New;//4)
-
+		/*Element* New = new Element(Data);
+		New->pNext = Temp;//1)
+		New->pPrev = Temp->pPrev;//2)
+		Temp->pPrev->pNext = New;//3)
+		Temp->pPrev = New;//4)*/
 		Temp->pPrev = Temp->pPrev->pNext = new Element(Data, Temp, Temp->pPrev);
 		size++;
 	}
@@ -188,46 +310,6 @@ public:
 		Tail->pNext = nullptr;
 		size--;
 	}
-	void erase(int index)
-	{
-		if (index > size)return;
-		if (Head == nullptr && Tail == nullptr) return;
-		if (Head == Tail)
-		{
-			delete Head;
-			Head = Tail = nullptr;
-			size--;
-			return;
-		}
-		if (index == 0)
-		{			
-			pop_front();
-			return;
-		}
-
-	    if (index == size)
-		{
-			pop_back();			
-			return;
-		}
-
-		Element* Temp;
-		if (index < size / 2)
-		{
-			Temp = Head;
-			for (int i = 0; i < index; i++)Temp = Temp->pNext;
-		}
-		else
-		{
-			Temp = Tail;
-			for (int i = 0; i < size - 1 - index; i++)Temp = Temp->pPrev;
-		}
-		Temp->pPrev->pNext = Temp->pNext;
-		Temp->pNext->pPrev = Temp->pPrev;
-		delete Temp;
-		size--;
-		
-	}
 
 	//			Methods:
 	void print()const
@@ -244,12 +326,16 @@ public:
 	}
 };
 
+void print(int arr[]);
+
 //#define BASE_CHECK
-#define RANGE_BASE_FOR_LIST
+//#define RANGE_BASED_FOR_ARRAY
+#define RANGE_BASED_FOR_LIST
 
 void main()
 {
 	setlocale(LC_ALL, "");
+
 #ifdef BASE_CHECK
 	int n;
 	cout << "Введите размер списка: "; cin >> n;
@@ -261,61 +347,56 @@ void main()
 	}
 	list.print();
 	list.reverse_print();
-    list.push_front(555);
-	list.print();
-	list.push_back(555);
-	list.print();
-
 
 	int index;
 	int value;
 	cout << "Введите индекс добавляемого элемента: "; cin >> index;
 	cout << "Введите значение добавляемого элемента: "; cin >> value;
-	list.insert(index-1, value);
-	list.print();
-	
-	list.reverse_print();
-
-	int index;
-	cout << "Введите индекс удаляемого элемента: "; cin >> index;
-	list.erase(index-1);
+	list.insert(index, value);
 	list.print();
 	list.reverse_print();
 #endif // BASE_CHECK
 
-#ifdef RANGE_BASE_FOR_LIST
+	/*int n;
+	unsigned long long int f = 1;
+	cout << "Введите число: "; cin >> n;
+	for (int i = 1; i <= n; i++)
+	{
+		cout << i << "! = ";
+		f *= i;
+		cout << f << endl;
+	}*/
+
+#ifdef RANGE_BASED_FOR_ARRAY
+	int arr[] = { 3,5,8,13,21 };
+	int size = sizeof(arr);
+	cout << typeid(arr).name() << endl;
+	for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	{
+		cout << arr[i] << tab;
+	}
+	cout << endl;
+
+	/*for (int i : arr)
+	{
+		cout << i << tab;
+	}
+	cout << endl;*/
+#endif // RANGE_BASED_FOR_ARRAY
+
+#ifdef RANGE_BASED_FOR_LIST
 	List list = { 3,5,8,13,21 };
+	list.print();
 	for (int i : list)
 	{
 		cout << i << tab;
 	}
 	cout << endl;
-#endif // RANGE_BASE_FOR_LIST
-	
+	for (List::ConstReverseIterator it = list.crbegin(); it; ++it)
+	{
+		cout << *it << tab;
+	}
+	cout << endl;
+#endif // RANGE_BASED_FOR_LIST
+
 }
-
-//void main()
-//{
-//	setlocale(LC_ALL, "");
-//	int n;
-//	cout << "Введите размер списка: "; cin >> n;
-//	List list;
-//	for (int i = 0; i < n; i++)
-//	{
-//		list.push_front(rand() % 100);
-//	}
-//	list.print();
-//	/*list.reverse_print();*/
-//	list.push_back(555);
-//	list.print();
-//	list.push_front(555);
-//	list.print();
-//}
-
-//TODO:
-
-//
-//Destructor;
-//CopyMethods;
-//MoveMethods;
-//ILconstructor;
