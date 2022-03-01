@@ -1,4 +1,4 @@
-//BinaryTree
+п»ї//BinaryTree
 #include<iostream>
 using namespace std;
 
@@ -35,6 +35,27 @@ public:
 		cout << "TDestructor:\t" << this << endl;
 	}
 
+	void insert(int Data)
+	{
+		insert(Data, Root);
+	}
+	int minValue()const
+	{
+		return minValue(Root);
+	}
+	int maxValue()const
+	{
+		return maxValue(Root);
+	}
+	int size()const
+	{
+		return size(Root);
+	}
+	void print()const
+	{
+		print(Root);
+	}
+private:
 	void insert(int Data, Element* Root)
 	{
 		if (this->Root == nullptr)
@@ -55,6 +76,24 @@ public:
 		}
 	}
 
+	int minValue(Element* Root)const
+	{
+		if (Root == nullptr)return 0;
+		/*if (Root->pLeft == nullptr)return Root->Data;
+		else return minValue(Root->pLeft);*/
+		//return Root->pLeft == nullptr ? Root->Data : minValue(Root->pLeft);
+		return Root->pLeft ? minValue(Root->pLeft) : Root->Data;
+	}
+	int maxValue(Element* Root)const
+	{
+		if (Root == nullptr)return 0;
+		return Root->pRight ? maxValue(Root->pRight) : Root->Data;
+	}
+	int size(Element* Root)const
+	{
+		return Root == nullptr ? 0 : size(Root->pLeft) + size(Root->pRight) + 1;
+	}
+
 	void print(Element* Root)const
 	{
 		if (Root == nullptr) return;
@@ -68,23 +107,26 @@ void main()
 {
 	setlocale(LC_ALL, "");
 	int n;
-	cout << "Ведите количество чисел: "; cin >> n;
+	cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: "; cin >> n;
 	Tree tree;
 	for (int i = 0; i < n; i++)
 	{
-		tree.insert(rand() % 100, tree.getRoot());
+		tree.insert(rand() % 100);
 	}
-	tree.print(tree.getRoot());
+	tree.print();
 	cout << endl;
+	cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: " << tree.minValue() << endl;
+	cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: " << tree.maxValue() << endl;
+	cout << "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: " << tree.size() << endl;
 }
 
 //TODO:
-//1. Написать рекурсивную функцию int factorial(int n), которая принимает число,
-//и возвращает факториал этого числа;
-//2. Написать реурсивную функцию double power(double a, int n), которая возводит указанное число
-//в указанную степень;
+//1. РќР°РїРёСЃР°С‚СЊ СЂРµРєСѓСЂСЃРёРІРЅСѓСЋ С„СѓРЅРєС†РёСЋ int factorial(int n), РєРѕС‚РѕСЂР°СЏ РїСЂРёРЅРёРјР°РµС‚ С‡РёСЃР»Рѕ,
+//Рё РІРѕР·РІСЂР°С‰Р°РµС‚ С„Р°РєС‚РѕСЂРёР°Р» СЌС‚РѕРіРѕ С‡РёСЃР»Р°;
+//2. РќР°РїРёСЃР°С‚СЊ СЂРµСѓСЂСЃРёРІРЅСѓСЋ С„СѓРЅРєС†РёСЋ double power(double a, int n), РєРѕС‚РѕСЂР°СЏ РІРѕР·РІРѕРґРёС‚ СѓРєР°Р·Р°РЅРЅРѕРµ С‡РёСЃР»Рѕ
+//РІ СѓРєР°Р·Р°РЅРЅСѓСЋ СЃС‚РµРїРµРЅСЊ;
 //----------------------------------------------------------
-//1. В класс BinaryTree добавить методы :
+//1. Р’ РєР»Р°СЃСЃ BinaryTree РґРѕР±Р°РІРёС‚СЊ РјРµС‚РѕРґС‹ :
 //int minValue();
 //int maxValue();
 //int size();
@@ -93,6 +135,6 @@ void main()
 //void erase(int Data);
 //CopyMethods;
 //MoveMethods;
-//2. Функции должны вызываться из main() без передачи в них корня дерева;
-//3. Вывести дерево в виде дерева;
-//4. Сбалансировать Бинарное дерево;
+//2. Р¤СѓРЅРєС†РёРё РґРѕР»Р¶РЅС‹ РІС‹Р·С‹РІР°С‚СЊСЃСЏ РёР· main() Р±РµР· РїРµСЂРµРґР°С‡Рё РІ РЅРёС… РєРѕСЂРЅСЏ РґРµСЂРµРІР°;
+//3. Р’С‹РІРµСЃС‚Рё РґРµСЂРµРІРѕ РІ РІРёРґРµ РґРµСЂРµРІР°;
+//4. РЎР±Р°Р»Р°РЅСЃРёСЂРѕРІР°С‚СЊ Р‘РёРЅР°СЂРЅРѕРµ РґРµСЂРµРІРѕ;
