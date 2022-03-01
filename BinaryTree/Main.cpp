@@ -107,7 +107,7 @@ void main()
 {
 	setlocale(LC_ALL, "");
 	int n;
-	cout << "������� ������ ������: "; cin >> n;
+	cout << "Введите количество элементов: "; cin >> n;
 	Tree tree;
 	for (int i = 0; i < n; i++)
 	{
@@ -115,9 +115,9 @@ void main()
 	}
 	tree.print();
 	cout << endl;
-	cout << "����������� �������� � ������: " << tree.minValue() << endl;
-	cout << "������������ �������� � ������: " << tree.maxValue() << endl;
-	cout << "���������� ��������� ������: " << tree.size() << endl;
+	cout << "Минимальным значением является: " << tree.minValue() << endl;
+	cout << "Максимальным значением является: " << tree.maxValue() << endl;
+	cout << "Количество элементов в дереве: " << tree.size() << endl;
 }
 
 //TODO:
