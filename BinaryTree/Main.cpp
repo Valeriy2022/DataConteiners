@@ -51,6 +51,10 @@ public:
 	{
 		return size(Root);
 	}
+	int sum()const
+	{
+		return sum(Root);
+	}
 	void print()const
 	{
 		print(Root);
@@ -94,6 +98,12 @@ private:
 		return Root == nullptr ? 0 : size(Root->pLeft) + size(Root->pRight) + 1;
 	}
 
+	int sum(Element* Root)const
+	{
+		if (Root == nullptr) return 0;
+		return Root->Data + sum(Root->pLeft) + sum(Root->pRight);
+	}
+
 	void print(Element* Root)const
 	{
 		if (Root == nullptr) return;
@@ -115,9 +125,10 @@ void main()
 	}
 	tree.print();
 	cout << endl;
-	cout << "Минимальным значением является: " << tree.minValue() << endl;
+	/*cout << "Минимальным значением является: " << tree.minValue() << endl;
 	cout << "Максимальным значением является: " << tree.maxValue() << endl;
-	cout << "Количество элементов в дереве: " << tree.size() << endl;
+	cout << "Количество элементов в дереве: " << tree.size() << endl;*/
+	cout << "Сумма элементов в дереве: " << tree.sum() << endl;
 }
 
 //TODO:
